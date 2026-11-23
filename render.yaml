@@ -1,0 +1,41 @@
+# Render Blueprint for Aelafat Countdown Bot
+# Deployed as a Background Worker with Persistent Disk for SQLite
+
+services:
+  - type: worker
+    name: aelafat-countdown-bot
+    runtime: python
+    region: frankfurt  # Close to East Africa / UTC+3
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    autoDeploy: true
+
+    disk:
+      name: aelafat-data
+      mountPath: /var/data
+      sizeGB: 1
+
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: DATABASE_PATH
+        value: /var/data/aelafat.db
+      - key: EVENT_DATE
+        value: 2027-01-05
+      - key: TIMEZONE
+        value: Africa/Addis_Ababa
+      - key: POST_TIME
+        value: "09:00"
+      - key: DEFAULT_LANGUAGE
+        value: both
+      - key: LOG_LEVEL
+        value: INFO
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: BOT_OWNER_ID
+        sync: false
+      - key: TELEGRAM_GROUP_ID
+        sync: false
+      - key: PROMO_IMAGE_URL
+        sync: false
